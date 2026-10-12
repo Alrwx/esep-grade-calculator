@@ -5,7 +5,7 @@ import "testing"
 func TestGetGradeA(t *testing.T) {
 	expected_value := "A"
 
-	gradeCalculator := NewGradeCalculator()
+	gradeCalculator := NewGradeCalculator(false)
 
 	gradeCalculator.AddGrade("open source assignment", 100, Assignment)
 	gradeCalculator.AddGrade("exam 1", 100, Exam)
@@ -21,7 +21,7 @@ func TestGetGradeA(t *testing.T) {
 func TestGetGradeB(t *testing.T) {
 	expected_value := "B"
 
-	gradeCalculator := NewGradeCalculator()
+	gradeCalculator := NewGradeCalculator(false)
 
 	gradeCalculator.AddGrade("open source assignment", 80, Assignment)
 	gradeCalculator.AddGrade("exam 1", 81, Exam)
@@ -37,7 +37,7 @@ func TestGetGradeB(t *testing.T) {
 func TestGetGradeF(t *testing.T) {
 	expected_value := "F"
 
-	gradeCalculator := NewGradeCalculator()
+	gradeCalculator := NewGradeCalculator(false)
 
 	gradeCalculator.AddGrade("open source assignment", 50, Assignment)
 	gradeCalculator.AddGrade("exam 1", 55, Exam)
@@ -53,7 +53,7 @@ func TestGetGradeF(t *testing.T) {
 func TestGetGradeC(t *testing.T) {
 	expected_value := "C"
 
-	gradeCalculator := NewGradeCalculator()
+	gradeCalculator := NewGradeCalculator(false)
 
 	gradeCalculator.AddGrade("open source assignment", 70, Assignment)
 	gradeCalculator.AddGrade("exam 1", 75, Exam)
@@ -69,7 +69,7 @@ func TestGetGradeC(t *testing.T) {
 func TestGetGradeD(t *testing.T) {
 	expected_value := "D"
 
-	gradeCalculator := NewGradeCalculator()
+	gradeCalculator := NewGradeCalculator(false)
 
 	gradeCalculator.AddGrade("open source assignment", 60, Assignment)
 	gradeCalculator.AddGrade("exam 1", 65, Exam)
@@ -85,7 +85,7 @@ func TestGetGradeD(t *testing.T) {
 func TestGetGradeWithMultipleGradesPerType(t *testing.T) {
 	expected_value := "B"
 
-	gradeCalculator := NewGradeCalculator()
+	gradeCalculator := NewGradeCalculator(false)
 
 	// assignments avg 85, exams avg 75, essays avg 90 -> 42.5 + 26.25 + 13.5 = 82.25
 	gradeCalculator.AddGrade("assignment 1", 80, Assignment)
@@ -105,7 +105,7 @@ func TestGetGradeWithMultipleGradesPerType(t *testing.T) {
 func TestGetGradeWithNoGrades(t *testing.T) {
 	expected_value := "F"
 
-	gradeCalculator := NewGradeCalculator()
+	gradeCalculator := NewGradeCalculator(false)
 
 	actual_value := gradeCalculator.GetFinalGrade()
 
@@ -127,5 +127,69 @@ func TestGradeTypeString(t *testing.T) {
 		if expected_value != actual_value {
 			t.Errorf("Expected String to return '%s'; got '%s' instead", expected_value, actual_value)
 		}
+	}
+}
+
+func TestGetPassFailGradePass(t *testing.T) {
+	expected_value := "Pass"
+
+	gradeCalculator := NewGradeCalculator(true)
+
+	gradeCalculator.AddGrade("open source assignment", 100, Assignment)
+	gradeCalculator.AddGrade("exam 1", 95, Exam)
+	gradeCalculator.AddGrade("essay on ai ethics", 91, Essay)
+
+	actual_value := gradeCalculator.GetFinalGrade()
+
+	if expected_value != actual_value {
+		t.Errorf("Expected GetGrade to return '%s'; got '%s' instead", expected_value, actual_value)
+	}
+}
+
+func TestGetPassFailGradePassAtCThreshold(t *testing.T) {
+	expected_value := "Pass"
+
+	gradeCalculator := NewGradeCalculator(true)
+
+	gradeCalculator.AddGrade("open source assignment", 70, Assignment)
+	gradeCalculator.AddGrade("exam 1", 70, Exam)
+	gradeCalculator.AddGrade("essay on ai ethics", 70, Essay)
+
+	actual_value := gradeCalculator.GetFinalGrade()
+
+	if expected_value != actual_value {
+		t.Errorf("Expected GetGrade to return '%s'; got '%s' instead", expected_value, actual_value)
+	}
+}
+
+func TestGetPassFailGradeFailWithD(t *testing.T) {
+	expected_value := "Fail"
+
+	gradeCalculator := NewGradeCalculator(true)
+
+	gradeCalculator.AddGrade("open source assignment", 60, Assignment)
+	gradeCalculator.AddGrade("exam 1", 65, Exam)
+	gradeCalculator.AddGrade("essay on ai ethics", 62, Essay)
+
+	actual_value := gradeCalculator.GetFinalGrade()
+
+	if expected_value != actual_value {
+		t.Errorf("Expected GetGrade to return '%s'; got '%s' instead", expected_value, actual_value)
+	}
+}
+
+func TestGetPassFailGradeFailWithF(t *testing.T) {
+	expected_value := "Fail"
+
+	gradeCalculator := NewGradeCalculator(true)
+
+	gradeCalculator.AddGrade("open source assignment", 50, Assignment)
+	gradeCalculator.AddGrade("exam 1", 55, Exam)
+	gradeCalculator.AddGrade("essay on ai ethics", 40, Essay)
+
+	actual_value := gradeCalculator.GetFinalGrade()
+
+	if expected_value != actual_value {
+		t.Errorf("Expected GetGrade to return '%s'; got '%s' instead", expected_value, actual_value)
 	}
 }
