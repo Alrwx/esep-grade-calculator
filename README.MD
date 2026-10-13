@@ -63,5 +63,3 @@ Print the coverage percentage:
 ```
 go test -cover ./...
 ```
-
-The HTML report highlights covered lines in green and uncovered lines in red.
